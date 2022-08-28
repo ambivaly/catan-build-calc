@@ -1,2 +1,2 @@
 # catan-build-calc
-Calculator for Catan building based on cards in hand
+Site made to automatically calculate options for things to build on your turn in Catan.
