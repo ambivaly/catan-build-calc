@@ -10,13 +10,13 @@ function addResource(resource) {
 
 /* Takes values from form, then creates a string to tell you what cards you have in hand */
 function submitButton() {
-    var cardString = "Your resources are: ";
+    var cardString = "<b>Your resources are:</b> ";
     for(var resource in resources) {
         resources[resource] = document.getElementById(resource).value;
-        cardString+=(resource.toUpperCase()+"-"+resources[resource]+" ");
+        cardString+=(resource.toUpperCase()+" - "+resources[resource]+" ");
     }
     var buildNums = basicBuilder();
-    cardString+="<br><br>You can build: "+buildNums['cities']+" Cities, "+buildNums['settlements']+" Settlements, "+buildNums['dcards']+" Dev Cards, and "+buildNums['roads']+" Roads.";
+    cardString+="<br><br><b>You can build:</b> "+buildNums['cities']+" Cities, "+buildNums['settlements']+" Settlements, "+buildNums['dcards']+" Dev Cards, and "+buildNums['roads']+" Roads.";
     document.getElementById('cardinfo').innerHTML = cardString;
 }
 

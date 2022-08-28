@@ -36,7 +36,7 @@ main {
 
 h1 {
     color: black;
-    font-size: 2.5vw;
+    font-size: 34px;
     border-style: none;
 }
 
@@ -55,8 +55,8 @@ form {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 10%;
+    margin-right: 10%;
     font-size: 1.2vw;
     font-family: 'Silkscreen', 'Brush Script MT', Garamond, fantasy;
 }
