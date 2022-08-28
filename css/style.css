@@ -46,6 +46,10 @@ h1 {
     font-size: 1.5vw;
 }
 
+.container img {
+    width: 5%;
+}
+
 form {
     text-align: center;
 }
