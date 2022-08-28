@@ -18,9 +18,9 @@ function submitButton() {
     var buildNums = basicBuilder();
     cardString += "<br><br><b>You can build:</b><br>" + 
     "<img src='.\\img\\builds\\city.png' alt='city'> " + buildNums['cities'] + " Cities " + 
-    "<img src='.\\img\\builds\\settlement.png' alt='settlement'> " + buildNums['settlements'] + " Settlements " + 
-    "<img src='.\\img\\builds\\dcard.png' alt='dcard'> " + buildNums['dcards'] + " Dev Cards "+
-    "<img src='.\\img\\builds\\road.png' alt='road'> " + buildNums['roads'] + " Roads";
+    "<img src='.\\img\\builds\\settlement.png' alt='settlement'> " + buildNums['settlements'] + " Settlements " +
+    "<img src='.\\img\\builds\\road.png' alt='road'> " + buildNums['roads'] + " Roads " +
+    "<img src='.\\img\\builds\\dcard.png' alt='dcard'> " + buildNums['dcards'] + " Dev Cards ";
     document.getElementById('cardinfo').innerHTML = cardString;
 }
 
