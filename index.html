@@ -26,19 +26,16 @@
     </header>
     <h1>Catan Hand Calculator</h1>
     <main>
-
-        <br><br><br><br><br>
-
-        <div class="container">
+        <div class="container" id="jscontainer">
             <div class="cardcount">
                 <span id="cardinfo">Please select the cards in your hand below</span>
             </div>
         </div>
         <br><br>
         <form name="catanform">
-            <div id="priority-box">
+            <!-- <div id="priority-box">
                 What would you like to prioritize building?:<br> 
-            </div>
+            </div> -->
             <br>
             <div class="formitems">
                 <div class="formcard">
@@ -67,9 +64,23 @@
                     <input type="number" id="ore" name="ore" value=0 min=0>
                 </div>
             </div>
-            <input type="button" id="submit" name="submit" value="Submit" onclick="submitButton()">
+            <input type="button" id="submit" name="submit" value="Submit" onclick="generateDisplayText(submit=true)">
             <input type="button" id="clear" name="clear" value="Clear" onclick="clearButton()">
+            <input type ="checkbox" id="catanplus" name="catanplus" value="CatanPlus" onclick="catanPlus()">
+            <label for="catanplus">CatanPlus+? </label>
         </form>
+        <br>
+        <div>
+            To Do:
+            <ul>
+                <li>Refine calculations for trading (ports/4:1)</li>
+                <li>Add click/hover effects to cards and buildings</li>
+                <li>Improve site formatting, make more visually appealing</li>
+                <li>In the long term - Generate build options based on a priority list</li>
+            </ul>
+        </div>
+        <br>
+
     </main>
     <script src="./js/index.js"></script>
 </body>
