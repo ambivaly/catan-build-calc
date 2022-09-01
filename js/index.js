@@ -3,7 +3,7 @@
 var hand = { 'wood': 0, 'brick': 0, 'sheep': 0, 'wheat': 0, 'ore': 0 };
 
 const resources = Object.keys(hand);
-const buildings = [
+var buildings = [
     {
         name: "City",
         cost: {
@@ -37,10 +37,64 @@ const buildings = [
     }
 ]
 
+var plusBuildings = [
+    {
+        name: "Knight",
+        const: {
+            "sheep": 1,
+            "wheat": 1,
+            "ore": 1,
+        }
+    },
+    {
+        name: "Barracks",
+        const: {
+            "wood": 1,
+            "sheep": 1,
+            "ore": 1,
+        }
+    },
+    {
+        name: "Market",
+        const: {
+            "wood": 1,
+            "sheep": 1,
+            "brick": 1,
+        }
+    },
+    {
+        name: "Wall",
+        const: {
+            "brick": 1,
+            "wheat": 1,
+        }
+    },
+    {
+        name: "Wall T2",
+        const: {
+            "wheat": 2,
+            "ore": 2,
+        }
+    },
+    {
+        name: "Castle",
+        const: {
+            "sheep": 2,
+            "wheat": 2,
+            "ore": 2,
+            "brick": 2,
+            "wood": 2,
+        }
+    }
+]
+
 // Creates the radio buttons to choose priority for sorting, is run immediately
 function createPriorityRadioBtns(buildings){
     const btnNames = buildings.map(building => building.name);
     const priorityBox = document.getElementById('priority-box');
+    while(priorityBox.firstChild){
+        priorityBox.removeChild(priorityBox.firstChild) // Clear out any existing buttons
+    }
     for(i in btnNames){
         btnItem = document.createElement('input');
         btnItem.type = 'radio';
@@ -95,11 +149,11 @@ function handStringBuilder(hand) {
 function buildStringBuilder(hand){
     //Building String Builder
     var buildNums = maxBuildingCount(hand);
-    var buildString = "<br><br><b>You can build:</b><br>" + 
-    "<img src='.\\img\\builds\\city.png' alt='city'> " + buildNums['City'] + " Cities " + 
-    "<img src='.\\img\\builds\\settlement.png' alt='settlement'> " + buildNums['Settlement'] + " Settlements " +
-    "<img src='.\\img\\builds\\road.png' alt='road'> " + buildNums['Road'] + " Roads " +
-    "<img src='.\\img\\builds\\dcard.png' alt='dcard'> " + buildNums['Development'] + " Dev Cards <br><br>";
+    var buildString = "<br><br><b>You can build:</b><br>";
+    for(building of buildings){ //Create a string for each building (including image), then add to string
+        buildString += `<img src='./img/builds/${building.name}.png' alt='${building.name}
+        ' onerror='javascript:this.src="./img/builds/Default.png"'> ${buildNums[building.name]} ${building.name}('s) ` //If image error, use Default.png
+    };
 
     return buildString;
 }
@@ -132,6 +186,15 @@ function maxBuildingCount(hand){
         }, {});
     return buildList;
 }
+
+function catanPlus(){
+    if(document.getElementById('catanplus').checked){
+        buildings+=plusBuildings;
+    }else{
+
+    }
+}
+
 
 
 function getBuildCombination(hand,buildFocus){

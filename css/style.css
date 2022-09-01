@@ -43,7 +43,7 @@ h1 {
 .container {
     text-align: center;
     font-family: 'Lora', 'Times New Roman', Garamond, serif;
-    font-size: 1.5vw;
+    /*font-size: 1.5vw;*/
 }
 
 .container img {
