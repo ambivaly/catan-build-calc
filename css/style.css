@@ -79,6 +79,18 @@ form {
     width: 90%;
 }
 
+.formcard img:hover, .buildingcard img:hover {
+    transform: rotate(0deg) scale(1);
+    -webkit-filter: drop-shadow(5px 5px 5px #222222);
+    filter: drop-shadow(5px 5px 5px #222222);
+}
+
+.formcard img:active, .buildingcard img:active {
+    transform:scale(0.9);
+    -webkit-filter: drop-shadow(10px 10px 10px black);
+    filter: drop-shadow(10px 10px 10px black);
+}
+
 .formcard input {
     width: 90%;
 }
@@ -100,4 +112,36 @@ footer img {
     float: right;
     margin-right: 1%;
 
+}
+
+/* 3D Transform. Craeted refering to Dudley Storey's Pen: https://codepen.io/dudleystorey/pen/KFLJp */
+.tdimension {
+  width: 300px;
+  height: 300px;
+  margin: 20px auto 40px auto;
+  perspective: 1000px;
+}
+.tdimension a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: url("https://mir-s3-cdn-cf.behance.net/project_modules/disp/e8346826957515.56361c2106f3f.png");
+  background-size: cover;
+  transform-style: preserve-3d;
+  transform: rotateX(70deg);
+  transition: all 0.8s; 
+}
+.tdimension:hover a {
+  transform: rotateX(20deg);  
+} 
+.tdimension a:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));    
+    transform: rotateX(90deg);
+    transform-origin: bottom;
 }
