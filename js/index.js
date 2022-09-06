@@ -1,7 +1,6 @@
 
 
 var hand = { 'wood': 0, 'brick': 0, 'sheep': 0, 'wheat': 0, 'ore': 0 };
-var bought = {};
 
 const resources = Object.keys(hand);
 var buildings = [
@@ -10,7 +9,9 @@ var buildings = [
         cost: {
             "wheat": 2,
             "ore": 3
-            }
+            },
+        canBuy: 0,
+        bought: 0
     },
     {
         name: "Settlement",
@@ -19,14 +20,18 @@ var buildings = [
             "brick": 1,
             "wheat": 1,
             "sheep": 1
-        }
+        },
+        canBuy: 0,
+        bought: 0
     },
     {
         name: "Road",
         cost: {
             "wood": 1,
             "brick": 1
-        }
+        },
+        canBuy: 0,
+        bought: 0
     },
     {
         name: "Development",
@@ -34,7 +39,9 @@ var buildings = [
             "sheep": 1,
             "wheat": 1,
             "ore": 1
-        }
+        },
+        canBuy: 0,
+        bought: 0
     },
 ]
 
@@ -46,7 +53,9 @@ var plusBuildings = [
             "sheep": 1,
             "wheat": 1,
             "ore": 1,
-        }
+        },
+        canBuy: 0,
+        bought: 0
     },
     {
         name: "Barracks",
@@ -54,7 +63,9 @@ var plusBuildings = [
             "wood": 2,
             "sheep": 1,
             "ore": 2,
-        }
+        },
+        canBuy: 0,
+        bought: 0
     },
     {
         name: "Market",
@@ -62,21 +73,27 @@ var plusBuildings = [
             "wood": 2,
             "sheep": 1,
             "brick": 2,
-        }
+        },
+        canBuy: 0,
+        bought: 0
     },
     {
         name: "Wall",
         cost: {
             "brick": 1,
             "wheat": 1,
-        }
+        },
+        canBuy: 0,
+        bought: 0
     },
     {
         name: "Wall T2",
         cost: {
             "wheat": 2,
             "ore": 2,
-        }
+        },
+        canBuy: 0,
+        bought: 0
     },
     {
         name: "Castle",
@@ -86,13 +103,75 @@ var plusBuildings = [
             "ore": 2,
             "brick": 2,
             "wood": 2,
-        }
+        },
+        canBuy: 0,
+        bought: 0
     }
 ]
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Hand Functions ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Checks how many times a single building can be built based on cards in hand, returns that value(number)
+/* Adds 1 to a resource field */
+function addResource(resource) {
+    document.getElementById(resource).value = Number(document.getElementById(resource).value) + 1; /* Notice: Had to convert string to num */
+}
+
+/* Updates the hand with the values from the form */
+function updateHand(submit=false) {
+    if(submit){
+        for (var resource in hand) {
+            hand[resource] = document.getElementById(resource).value;
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// String Builders ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* Returns a string of all the cards in your hand */
+function handStringBuilder() {
+    // Hand String Builder
+    var handString = "<b>Your hand is:</b><br> ";
+    var handStringList = [];
+    for (var resource in hand) {
+        if(hand[resource] != 0) {
+            handStringList.push(hand[resource]+" "+resource.charAt(0).toUpperCase()+resource.slice(1))}; // Add capitalized string to list of resources
+        }
+    handString += handStringList.join(', ');
+    
+    return handString;
+}
+
+/* Returns a string for buildings that have been built */
+function boughtStringBuilder(){
+    var boughtString = "<br><br><b>You have built:</b><div class='boughtbuildings'>";
+    for(building of buildings){
+        if(building.bought!=0){boughtString +=`<div class='buildingcard'><img src='./img/builds/${building.name}.png' alt='${building.name}
+        ' onerror='javascript:this.src="./img/builds/Default.png"' onclick='sellBuilding("${building.name}")'><br><b>${building.bought}<br>${building.name}(s)</b></div>`};
+    }
+    boughtString += "</div><br>";
+    
+    return boughtString;
+}
+
+/* Returns a string for the buildings that you can build */
+function buildStringBuilder(){
+    var buildString = "<br><br><b>You can build:</b><div class='buildingitems'>";
+    for(building of buildings){ //Create a string for each building (including image), then add to string
+        if(building.canBuy!=0){buildString +=`<div class='buildingcard'><img src='./img/builds/${building.name}.png' alt='${building.name}
+        ' onerror='javascript:this.src="./img/builds/Default.png"' onclick='buyBuilding("${building.name}")'><br><b>${building.canBuy}<br>${building.name}(s)</b></div>`};
+    };
+    buildString += "</div>";
+    return buildString;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Building Functions ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*Checks how many times a single building can be built based on cards in hand, returns that value(number) */
 function canBuildTimes(hand, buildingName){
     const building = buildings.find(building => building.name === buildingName);//Find building in buildings with name value equal to buildingName (passed in)
     if(building==false){return 0}; //Return 0 if building doesn't exist
@@ -102,141 +181,126 @@ function canBuildTimes(hand, buildingName){
     return min;
 }
 
-
-/* Simple function, takes resource name(string), then increases that resource value on the form by 1 */
-function addResource(resource) {
-    document.getElementById(resource).value = Number(document.getElementById(resource).value) + 1; /* Notice: Had to convert string to num */
-}
-
-
-function boughtStringBuilder(){
-    var boughtString = "<br><br><b>You have built:</b><div class='boughtbuildings'>";
-    for(building in bought){
-        if(bought[building]!=0){boughtString +=`<div class='buildingcard'><img src='./img/builds/${building}.png' alt='${building}
-        ' onerror='javascript:this.src="./img/builds/Default.png"' onclick='sellBuilding("${building}")'><br><b>${bought[building]}<br>${building}(s)</b></div>`};
-    }
-    boughtString += "</div><br>";
-    
-    return boughtString;
-}
-
-// Returns a string of all the cards in your hand
-function handStringBuilder(hand,submit=false) {
-    // Hand String Builder
-    var handString = "<b>Your hand is:</b><br> ";
-    var handStringList = [];
-    if(submit){ // If submit button pressed, use values from form to fill out the hand
-        for (var resource in hand) {
-            hand[resource] = document.getElementById(resource).value;
-            if(hand[resource] != 0) //If you have a card of that research
-                {handStringList.push(hand[resource]+" "+resource.charAt(0).toUpperCase()+resource.slice(1))}; // Add capitalized string to list of resources
-        }
-    }else{ // If no submit button pressed, don't add resources to hand
-        for (var resource in hand){
-            if(hand[resource] != 0)
-                {handStringList.push(hand[resource]+" "+resource.charAt(0).toUpperCase()+resource.slice(1))};
+/* Updates each building with how many times it can be built */
+function updateBuildings(submit=false){
+    for(building of buildings){
+        building.canBuy = canBuildTimes(hand, building.name); // Set canBuy for resource to number of times it can be built
+        if(submit){
+            building.bought = 0; // If submit pressed, reset bought buildings to 0
         }
     }
-    handString += handStringList.join(', '); // Join resource list and format it, then add to the cardString
-
-    return handString;
 }
 
-// Returns a string of all the buildings possible to build, (dumb builder)
-function buildStringBuilder(hand){
-    //Building String Builder
-    var buildNums = maxBuildingCount(hand);
-    var buildString = "<br><br><b>You can build:</b><div class='buildingitems'>";
-    for(building of buildings){ //Create a string for each building (including image), then add to string
-        if(buildNums[building.name]!=0){buildString +=`<div class='buildingcard'><img src='./img/builds/${building.name}.png' alt='${building.name}
-        ' onerror='javascript:this.src="./img/builds/Default.png"' onclick='buyBuilding("${building.name}")'><br><b>${buildNums[building.name]}<br>${building.name}(s)</b></div>`};
+/* Adds 1 to building.bought, subtracts resources from hand */
+function buyBuilding(buildingName, amount=1, manual=true){
+    for(building of buildings){
+        if(building.name === buildingName){
+            building.bought += amount;
+            Object.entries(building.cost).forEach(([key, value]) => hand[key] -= value*amount); // Subtract from hand the cost of each building cost entry
+            updateBuildings();
+        }
+    }
+
+    if(manual){
+        generateDisplayText(); // Regenerates the display
     };
-    buildString += "</div>";
-
-    return buildString;
 }
 
-/* Takes values from form, then creates a string to tell you what cards you have in hand */
+/* Subtracts 1 from building.bought, adds resources back to hand */
+function sellBuilding(buildingName, amount=1, manual=true){
+    for(building of buildings){
+        if(building.name === buildingName){
+            building.bought -= amount;
+            Object.entries(building.cost).forEach(([key, value]) => hand[key] += value*amount); // Add to hand the cost of each building cost entry
+            updateBuildings();
+        }
+    };
+
+    if(manual){
+        generateDisplayText(); // Regenerates the display
+    };
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Button Functions /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* Updates hand/buildings based on form inputs, then generates HTML based on those updates in the "cardinfo" div */
 function generateDisplayText(submit=false) {
-    if(submit){
-        bought={}
-        var cardString = boughtStringBuilder()+handStringBuilder(hand,true)+buildStringBuilder(hand);
-    }else{
-        var cardString = boughtStringBuilder()+handStringBuilder(hand,false)+buildStringBuilder(hand);
-    };
+    updateHand(submit);
+    updateBuildings(submit);
+    var cardString = boughtStringBuilder()+handStringBuilder(submit)+buildStringBuilder();
 
     document.getElementById('cardinfo').innerHTML = cardString; // Display the cardstrings, hand+buildings
 }
 
-/* Resets all the resource input fields, and resets the cardinfo string */
+/* Resets all of the values for resources in your hand, and replaces the "cardinfo" div with generic text */
 function clearButton() {
     for (var resource in hand) {
         document.getElementById(resource).value = 0;
     }
-    bought = {};
     document.getElementById('cardinfo').innerHTML = "Please select the cards in your hand below";
 }
 
-// Takes your hand of resources, runs it through the canBuildTimes method to return an array of how many of each building you can build maximum
-function maxBuildingCount(hand){
-    const buildList = buildings.map(building=>building.name).reduce( // Create array with building names
-        (build, name)=>{build[name]=canBuildTimes(hand,name); // For each building name, assign building a value based on canBuildTimes
-        return build; // Return the array, complete with building and number of times building is built 
-        }, {});
-    return buildList;
-}
-
-// If the checkbox is checked, add catanplus buildings. If unchecked, remove catanplus buildings
+/* If the checkbox is checked, add catanplus buildings. If unchecked, remove catanplus buildings */
 function catanPlus(){
     if(document.getElementById('catanplus').checked){
         for(building of plusBuildings){
             buildings.push(building); // Add each catanplus building
         }
-        createPriorityRadioBtns(buildings); // Regenerate the priority buttons
+        createPriorityRadioBtns(); // Regenerate the priority buttons
     }else{
         buildings = buildings.filter( (building) => !plusBuildings.includes(building) ); // Filter the catanplus buildings
-        createPriorityRadioBtns(buildings); // Regenerate the priority buttons
+        createPriorityRadioBtns(); // Regenerate the priority buttons
     }
 }
 
-function buyBuilding(buildingName){
-    const building = buildings.find(building => building.name === buildingName);// Find building in buildings with name value equal to buildingName (passed in)
-    Object.entries(building.cost).forEach(([key, value]) => hand[key] -= value);// Subtract from hand the cost of each building cost entry
-    bought[building.name] = (bought[building.name] || 0)+1; // If building has been bought, add 1. OR take the number 0, then add one
-    generateDisplayText();
-}
-
-function sellBuilding(buildingName){
-    const building = buildings.find(building => building.name === buildingName);// Find building in buildings with name value equal to buildingName (passed in)
-    Object.entries(building.cost).forEach(([key, value]) => hand[key] += value);// Add to hand the cost of each building cost entry
-    bought[building.name] -=1; // Subtract 1 from bought building
+/* Builds cards based on selected priority button */
+function priorityBuild(){
+    var buildFocus = document.querySelector('input[name="priority"]:checked').value;
+    getBuildCombination(buildFocus);
     generateDisplayText();
 }
 
 
-function getBuildCombination(hand,buildFocus){
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// In Development Functions /////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function getBuildCombination(buildFocus){
+    //console.log(buildFocus);
+    var priorityBuilding = buildings.find(building => building.name === buildFocus);
+    if(priorityBuilding.canBuy != 0) {
+        buyBuilding(priorityBuilding.name, priorityBuilding.canBuy, false);
+    }
+    for(building of buildings){
+        if(building.canBuy != 0){
+            buyBuilding(building.name, building.canBuy, false);
+        }
+    }
 }
 
 
-// // Creates the radio buttons to choose priority for sorting, is run immediately
-// function createPriorityRadioBtns(buildings){
-//     const btnNames = buildings.map(building => building.name);
-//     const priorityBox = document.getElementById('priority-box');
-//     while(priorityBox.firstChild){
-//         priorityBox.removeChild(priorityBox.firstChild) // Clear out any existing buttons
-//     }
-//     for(i in btnNames){
-//         btnItem = document.createElement('input');
-//         btnItem.type = 'radio';
-//         btnItem.id = btnNames[i];
-//         btnItem.name = 'priority';
-//         btnItem.value = btnNames[i];
-//         btnItem.checked = (i==0);
-//         btnLabel = document.createElement('label');
-//         btnLabel.htmlFor = btnNames[i];
-//         btnLabel.innerHTML = btnNames[i]+' ';
-//         priorityBox.appendChild(btnLabel);
-//         priorityBox.appendChild(btnItem);
-//     }
-// }
-// createPriorityRadioBtns(buildings);
+/* Creates the radio buttons to choose priority for sorting, is run immediately */
+function createPriorityRadioBtns(){
+    const btnNames = buildings.map(building => building.name);
+    const priorityBox = document.getElementById('priority-box');
+    while(priorityBox.firstChild){
+        priorityBox.removeChild(priorityBox.firstChild) // Clear out any existing buttons
+    }
+    for(i in btnNames){
+        btnItem = document.createElement('input');
+        btnItem.type = 'radio';
+        btnItem.id = btnNames[i];
+        btnItem.name = 'priority';
+        btnItem.value = btnNames[i];
+        btnItem.checked = (i==0);
+        btnLabel = document.createElement('label');
+        btnLabel.htmlFor = btnNames[i];
+        btnLabel.innerHTML = btnNames[i]+' ';
+        priorityBox.appendChild(btnItem);
+        priorityBox.appendChild(btnLabel);
+    }
+}
+
+createPriorityRadioBtns();
