@@ -147,6 +147,7 @@ function handStringBuilder() {
 
 /* Returns a string for buildings that have been built */
 function boughtStringBuilder(){
+    //Bought String Builder
     var boughtString = "<br><br><b>You have built:</b><div class='boughtbuildings'>";
     for(building of buildings){
         if(building.bought!=0){boughtString +=`<div class='buildingcard'><img src='./img/builds/${building.name}.png' alt='${building.name}
@@ -159,6 +160,7 @@ function boughtStringBuilder(){
 
 /* Returns a string for the buildings that you can build */
 function buildStringBuilder(){
+    //Build String Builder
     var buildString = "<br><br><b>You can build:</b><div class='buildingitems'>";
     for(building of buildings){ //Create a string for each building (including image), then add to string
         if(building.canBuy!=0){buildString +=`<div class='buildingcard'><img src='./img/builds/${building.name}.png' alt='${building.name}
@@ -171,7 +173,7 @@ function buildStringBuilder(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Building Functions ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*Checks how many times a single building can be built based on cards in hand, returns that value(number) */
+/* Checks how many times a single building can be built based on cards in hand, returns that value(number) */
 function canBuildTimes(hand, buildingName){
     const building = buildings.find(building => building.name === buildingName);//Find building in buildings with name value equal to buildingName (passed in)
     if(building==false){return 0}; //Return 0 if building doesn't exist
@@ -202,7 +204,7 @@ function buyBuilding(buildingName, amount=1, manual=true){
     }
 
     if(manual){
-        generateDisplayText(); // Regenerates the display
+        generateDisplayText(); // Regenerates the display, only if manually clicking to buy
     };
 }
 
@@ -217,7 +219,7 @@ function sellBuilding(buildingName, amount=1, manual=true){
     };
 
     if(manual){
-        generateDisplayText(); // Regenerates the display
+        generateDisplayText(); // Regenerates the display, only if manually clicking to buy
     };
 }
 
@@ -266,16 +268,15 @@ function priorityBuild(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // In Development Functions /////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/* Buys buildings based on what priority button is selected */
 function getBuildCombination(buildFocus){
-    //console.log(buildFocus);
-    var priorityBuilding = buildings.find(building => building.name === buildFocus);
+    var priorityBuilding = buildings.find(building => building.name === buildFocus); // Find the priority building
     if(priorityBuilding.canBuy != 0) {
-        buyBuilding(priorityBuilding.name, priorityBuilding.canBuy, false);
+        buyBuilding(priorityBuilding.name, priorityBuilding.canBuy, false); // If can buy building, then buy the building a number of times as it can be built
     }
     for(building of buildings){
         if(building.canBuy != 0){
-            buyBuilding(building.name, building.canBuy, false);
+            buyBuilding(building.name, building.canBuy, false); // After priority has been built, build remainder in order of building list, not ideal honestly
         }
     }
 }
@@ -288,7 +289,7 @@ function createPriorityRadioBtns(){
     while(priorityBox.firstChild){
         priorityBox.removeChild(priorityBox.firstChild) // Clear out any existing buttons
     }
-    for(i in btnNames){
+    for(i in btnNames){ // For building, create a button with a label in the priority-box field
         btnItem = document.createElement('input');
         btnItem.type = 'radio';
         btnItem.id = btnNames[i];
@@ -303,4 +304,4 @@ function createPriorityRadioBtns(){
     }
 }
 
-createPriorityRadioBtns();
+createPriorityRadioBtns(); // Run at start
