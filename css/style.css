@@ -113,3 +113,7 @@ footer img {
     margin-right: 1%;
 
 }
+::selection {
+    color: none;
+    background: none;
+}
