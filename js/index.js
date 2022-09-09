@@ -6,6 +6,7 @@ const resources = Object.keys(hand);
 var buildings = [
     {
         name: "City",
+        image: "./img/builds/City.png",
         cost: {
             "wheat": 2,
             "ore": 3
@@ -15,6 +16,7 @@ var buildings = [
     },
     {
         name: "Settlement",
+        image: "./img/builds/Settlement.png",
         cost: {
             "wood": 1,
             "brick": 1,
@@ -26,6 +28,7 @@ var buildings = [
     },
     {
         name: "Road",
+        image: "./img/builds/Road.png",
         cost: {
             "wood": 1,
             "brick": 1
@@ -35,6 +38,7 @@ var buildings = [
     },
     {
         name: "Development",
+        image: "./img/builds/Development.png",
         cost: {
             "sheep": 1,
             "wheat": 1,
@@ -49,6 +53,7 @@ var buildings = [
 var plusBuildings = [
     {
         name: "Knight",
+        image: "./img/builds/Knight.png",
         cost: {
             "sheep": 1,
             "wheat": 1,
@@ -59,6 +64,7 @@ var plusBuildings = [
     },
     {
         name: "Barracks",
+        image: "./img/builds/Barracks.png",
         cost: {
             "wood": 2,
             "sheep": 1,
@@ -69,6 +75,7 @@ var plusBuildings = [
     },
     {
         name: "Market",
+        image: "./img/builds/Market.png",
         cost: {
             "wood": 2,
             "sheep": 1,
@@ -79,6 +86,7 @@ var plusBuildings = [
     },
     {
         name: "Wall",
+        image: "./img/builds/Wall.png",
         cost: {
             "brick": 1,
             "wheat": 1,
@@ -88,6 +96,7 @@ var plusBuildings = [
     },
     {
         name: "Wall T2",
+        image: "./img/builds/Wall T2.png",
         cost: {
             "wheat": 2,
             "ore": 2,
@@ -97,6 +106,7 @@ var plusBuildings = [
     },
     {
         name: "Castle",
+        image: "./img/builds/Castle.png",
         cost: {
             "sheep": 2,
             "wheat": 2,
@@ -150,7 +160,7 @@ function boughtStringBuilder(){
     //Bought String Builder
     var boughtString = "<br><br><b>You have built:</b><div class='boughtbuildings'>";
     for(building of buildings){
-        if(building.bought!=0){boughtString +=`<div class='buildingcard'><img src='./img/builds/${building.name}.png' alt='${building.name}
+        if(building.bought!=0){boughtString +=`<div class='buildingcard'><img src='${building.image}' alt='${building.name}
         ' onerror='javascript:this.src="./img/builds/Default.png"' onclick='sellBuilding("${building.name}")'><br><b>${building.bought}<br>${building.name}(s)</b></div>`};
     }
     boughtString += "</div><br>";
@@ -163,7 +173,7 @@ function buildStringBuilder(){
     //Build String Builder
     var buildString = "<br><br><b>You can build:</b><div class='buildingitems'>";
     for(building of buildings){ //Create a string for each building (including image), then add to string
-        if(building.canBuy!=0){buildString +=`<div class='buildingcard'><img src='./img/builds/${building.name}.png' alt='${building.name}
+        if(building.canBuy!=0){buildString +=`<div class='buildingcard'><img src='${building.image}' alt='${building.name}
         ' onerror='javascript:this.src="./img/builds/Default.png"' onclick='buyBuilding("${building.name}")'><br><b>${building.canBuy}<br>${building.name}(s)</b></div>`};
     };
     buildString += "</div>";
@@ -264,24 +274,6 @@ function priorityBuild(){
     generateDisplayText();
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// In Development Functions /////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* Buys buildings based on what priority button is selected */
-function getBuildCombination(buildFocus){
-    var priorityBuilding = buildings.find(building => building.name === buildFocus); // Find the priority building
-    if(priorityBuilding.canBuy != 0) {
-        buyBuilding(priorityBuilding.name, priorityBuilding.canBuy, false); // If can buy building, then buy the building a number of times as it can be built
-    }
-    for(building of buildings){
-        if(building.canBuy != 0){
-            buyBuilding(building.name, building.canBuy, false); // After priority has been built, build remainder in order of building list, not ideal honestly
-        }
-    }
-}
-
-
 /* Creates the radio buttons to choose priority for sorting, is run immediately */
 function createPriorityRadioBtns(){
     const btnNames = buildings.map(building => building.name);
@@ -305,3 +297,34 @@ function createPriorityRadioBtns(){
 }
 
 createPriorityRadioBtns(); // Run at start
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// In Development Functions /////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* Buys buildings based on what priority button is selected */
+function getBuildCombination(buildFocus){
+    var priorityBuilding = buildings.find(building => building.name === buildFocus); // Find the priority building
+    if(priorityBuilding.canBuy != 0) {
+        buyBuilding(priorityBuilding.name, priorityBuilding.canBuy, false); // If can buy building, then buy the building a number of times as it can be built
+    }
+    for(building of buildings){
+        if(building.canBuy != 0){
+            buyBuilding(building.name, building.canBuy, false); // After priority has been built, build remainder in order of building list, not ideal honestly
+        }
+    }
+}
+
+function addBuilding(){
+    var newbuilding = {name:document.getElementById("buildname").value, image:document.getElementById("buildimage").value, cost:{}, canBuy:0, bought:0};
+    var cost = {"wood": document.getElementById("buildwood").value,
+    "brick": document.getElementById("buildbrick").value,
+    "sheep": document.getElementById("buildsheep").value, 
+    "wheat": document.getElementById("buildwheat").value,
+    "ore": document.getElementById("buildore").value};
+    newbuilding.cost = cost;
+    if(!buildings.some(building => building.name == newbuilding.name)){
+        buildings.push(newbuilding);
+    }
+    createPriorityRadioBtns();
+}

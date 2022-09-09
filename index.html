@@ -74,12 +74,36 @@
         <div>
             To Do:
             <ul>
-                <li>Refine calculations for trading (ports/4:1)</li>
                 <li><s>Add click/hover effects to cards and buildings</s></li>
                 <li>Improve site formatting, make more visually appealing</li>
-                <li>In the long term - Generate build options based on a priority list</li>
+                <li>Long term: Generate build options based on a priority list with more options</li>
+                <li>Long Term: Refine calculations for trading (ports/4:1)</li>
             </ul>
         </div>
+        <form name="newbuilding">
+            Add a custom building below!
+            <br>
+            <label for="buildname">Building Name:</label>
+            <input type="text" id="buildname" name="buildname" value="">
+            <br>
+            (Input image URL, some don't work due to cross-origin issues)
+            <br>
+            <label for="buildimage">Building Image:</label>
+            <input type="url" id="buildimage" name="buildimage" value="">
+            <label for="buildwood">Wood Cost:</label>
+            <input type="number" id="buildwood" name="buildwood" value="0" min="0">
+            <label for="buildbrick">Brick Cost:</label>
+            <input type="number" id="buildbrick" name="buildbrick" value="0" min="0">
+            <br>
+            <label for="buildsheep">Sheep Cost:</label>
+            <input type="number" id="buildsheep" name="buildsheep" value="0" min="0">
+            <label for="buildwheat">Wheat Cost:</label>
+            <input type="number" id="buildwheat" name="buildwheat" value="0" min="0">
+            <label for="buildore">Ore Cost:</label>
+            <input type="number" id="buildore" name="buildore" value="0" min="0">
+            <br>
+            <input type="button" id="custombuild" name="custombuild" value="Add" onclick="addBuilding()">
+        </form>
         <br>
 
     </main>
